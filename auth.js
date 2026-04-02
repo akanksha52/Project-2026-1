@@ -74,5 +74,20 @@ app.get("/signup", (req, res) =>
     res.render("2_signup.ejs");
 });
 
+app.post("/signup", async (req, res) =>
+{
+    const {email, phone, password}=req.body;
+    if(!email || !phone || !password)
+    {
+        return res.send("Failed to login!")
+    }
+    const result=await userModel.insertOne({email: email, phone: phone, password: password});
+    if(!result)
+    {
+        return res.send("Email or phone already register!");
+    }
+    res.redirect("/");
+});
+
 
 app.listen(3000);
