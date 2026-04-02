@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "epress": "^0.0.1-security",
+    "node": "^25.9.0",
+    "nodemon": "^3.1.14"
+  }
+}
