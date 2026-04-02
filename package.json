@@ -1,6 +1,28 @@
 {
+  "name": "chronos-collab",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/akanksha52/Project-2026-1#readme",
+  "bugs": {
+    "url": "https://github.com/akanksha52/Project-2026-1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akanksha52/Project-2026-1.git"
+  },
+  "license": "ISC",
+  "author": "Akanksha",
+  "type": "module",
+  "main": "auth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
+    "ejs": "^5.0.1",
     "epress": "^0.0.1-security",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.3",
     "node": "^25.9.0",
     "nodemon": "^3.1.14"
   }
