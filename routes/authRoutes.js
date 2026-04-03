@@ -1,13 +1,11 @@
 import express from "express";
 import {
-    home,
     getLogin,
     postLogin,
     getSignup,
     postSignup,
     logout
 } from "../controllers/authController.js";
-import isAuth from "../middleware/isAuth.js";
 
 const router=express.Router();
 

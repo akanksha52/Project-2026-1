@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import connectToDB from "./config/db.js";
+import isAuth from "./middleware/isAuth.js";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) =>
+app.get("/", isAuth, (req, res) =>
 {
     res.send("home");
 });
