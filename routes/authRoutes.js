@@ -11,12 +11,12 @@ import isAuth from "../middleware/isAuth.js";
 
 const router=express.Router();
 
-router.get("/auth/login", getLogin);
-router.post("/auth/login", postLogin);
+router.get("/login", getLogin);
+router.post("/login", postLogin);
 
-router.get("/auth/signup", getSignup);
-router.post("/auth/signup", postSignup);
+router.get("/signup", getSignup);
+router.post("/signup", postSignup);
 
-router.get("/auth/logout", logout);
+router.get("/logout", logout);
 
 export default router;

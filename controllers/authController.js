@@ -1,6 +1,8 @@
 import userModel from "../models/userModel.js";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const SECRET_KEY=process.env.SECRET_KEY;
 
@@ -49,13 +51,13 @@ export const postSignup=async (req, res) => {
 
     try {
         await userModel.create({ email, phone, password: hashedPassword });
-        res.redirect("/auth/login");
+        res.redirect("/");
     } catch {
         res.send("User already exists!");
     }
 };
 
-export const logout = (req, res) => {
+export const logout=(req, res) => {
     res.clearCookie("token");
     res.redirect("/auth/login");
 };

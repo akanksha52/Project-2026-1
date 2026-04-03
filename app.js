@@ -15,9 +15,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 
+app.get("/", (req, res) =>
+{
+    res.send("home");
+});
+
 app.use("/auth", authRoutes);
 
-router.get("/", isAuth, home);
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");
