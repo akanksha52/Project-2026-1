@@ -6,16 +6,19 @@ dotenv.config();
 
 const SECRET_KEY=process.env.SECRET_KEY;
 
-export const home=(req, res) => {
+export const home=(req, res) => 
+{
     res.send("Home page!");
 };
 
-export const getLogin=(req, res) => {
+export const getLogin=(req, res) => 
+{
     res.render("1_login.ejs");
 };
 
-export const postLogin=async (req, res) => {
-    let {field, password} = req.body;
+export const postLogin=async (req, res) => 
+{
+    let {field, password}=req.body;
 
     if (!field || !password)
         return res.send("Failed to login!");
@@ -37,11 +40,13 @@ export const postLogin=async (req, res) => {
     res.redirect("/");
 };
 
-export const getSignup=(req, res) => {
+export const getSignup=(req, res) => 
+{
     res.render("2_signup.ejs");
 };
 
-export const postSignup=async (req, res) => {
+export const postSignup=async (req, res) => 
+{
     const {email, phone, password}=req.body;
 
     if(!email || !phone || !password)
@@ -57,7 +62,8 @@ export const postSignup=async (req, res) => {
     }
 };
 
-export const logout=(req, res) => {
+export const logout=(req, res) => 
+{
     res.clearCookie("token");
     res.redirect("/auth/login");
 };

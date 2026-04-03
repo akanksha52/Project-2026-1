@@ -3,4 +3,4 @@ import mongoose from "mongoose";
 
 const docModel=mongoose.model('doc', docSchema);
 
-export default userModel;
+export default docModel;

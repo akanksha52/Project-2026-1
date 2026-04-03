@@ -1,8 +1,10 @@
+import express from "express";
 import docModel from "../models/docModel.js";
 
 const router=express.Router();
 
-export const getAll=async (req, res) => {
+export const getAll=async (req, res) => 
+{
     try
     {
         const page=parseInt(req,Query.page) || 1;
@@ -20,12 +22,46 @@ export const getAll=async (req, res) => {
     }
 };
 
-router.get("/login", getLogin);
-router.post("/login", postLogin);
+export const getById=async (req, res) =>
+{
+    const doc=await docModel.findById(req.params.id);
+    if(!doc) return res.send("Document not found!");
+    if(doc.owner.toString()!=req.userId) return res.send("Unauthorised");
+    res.json(doc);
+};
 
-router.get("/signup", getSignup);
-router.post("/signup", postSignup);
+export const createDoc=async (req, res) =>
+{
+    const {title}=req.body;
+    try
+    {
+        const doc=await docModel.create({title: title, owner: req.userId});
+        res.json(doc);
+    }
+    catch(err)
+    {
+        if(err.code==11000) return res.send("Title already exists");
+        return res.send("Error creating document");
+    }
+}
 
-router.get("/logout", logout);
+export const putDocById=async (req, res) =>
+{
+    const {content , title}=req.body;
+    const doc=await docModel.findById(req.params.id);
+    if(!doc) return res.send("Document not found");
+    if(doc.owner.toString!=req.userId) return res.send("Unauthorised");
+    if(content!=undefined) doc.content=content;
+    if(title!=undefined) doc.title=title;
+    await doc.save();
+    res.send("Updated");
+}
 
-export default router;
+export const deleteDocById=async (req, res) =>
+{
+    const doc=await docModel.findById(req.params.id);
+    if(!doc) return res.send("Document not found");
+    if(doc.owner.toString!=req.userId) return res.send("Unauthorised");
+    await doc.deleteOne();
+    res.send("Deleted");
+}
