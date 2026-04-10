@@ -5,10 +5,17 @@ import authRoutes from "./routes/authRoutes.js";
 import docRoutes from "./routes/docRoutes.js"
 import connectToDB from "./config/db.js";
 import isAuth from "./middleware/isAuth.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app=express();
+
+app.use(cors(
+{
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 
 connectToDB();
 
@@ -19,7 +26,7 @@ app.set("view engine", "ejs");
 
 app.get("/", isAuth, (req, res) =>
 {
-    res.send("home");
+    res.json({message: "Home"});
 });
 
 app.use("/auth", authRoutes);

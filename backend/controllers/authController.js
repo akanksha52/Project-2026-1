@@ -13,7 +13,7 @@ export const home=(req, res) =>
 
 export const getLogin=(req, res) => 
 {
-    res.render("1_login.ejs");
+    res.json({message: "Login page"});
 };
 
 export const postLogin=async (req, res) => 
