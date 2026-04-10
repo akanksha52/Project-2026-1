@@ -3,6 +3,8 @@ import docModel from "../models/docModel.js";
 
 const router=express.Router();
 
+const SECRET_KEY=process.env.SECRET_KEY;
+
 export const getAll=async (req, res) => 
 {
     try

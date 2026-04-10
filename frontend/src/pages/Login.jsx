@@ -6,8 +6,9 @@ function Login()
 {
     const [field, setField]=useState("");
     const [password, setPassword]=useState("");
-    async function handleLogin() 
+    async function handleLogin(e) 
     {
+        e.preventDefault();
         const res=await fetch
         (
             "http://localhost:3000/auth/login", 
@@ -21,14 +22,14 @@ function Login()
             }
         );
         const data=await res.json();
-        if(data.token) 
+        if(res.ok) 
         {
+            alert("Login successful");
             localStorage.setItem("token", data.token);
-            window.location.href = "/dashboard";
         } 
         else 
-        {
-            alert(data.message);
+            {
+            alert(data.message || "Login failed ❌");
         }
     }
 
@@ -36,16 +37,16 @@ function Login()
         <div className={styles.container}>
             <div className={styles.formBox}>
                 <h2>Login</h2>
-                <form onSubmit={handleLogin} action="/auth/login" method="POST">
+                <form onSubmit={handleLogin}>
                     
                     <div className={styles.inputGroup}>
                         <label>Email or Phone number</label>
-                        <input type="text" name="field" required/>
+                        <input onChange={(e) => setField(e.target.value)} type="text" name="field" required/>
                     </div>
 
                     <div className={styles.inputGroup}>
                         <label>Password</label>
-                        <input type="password" name="password" required/>
+                        <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" required/>
                     </div>
 
                     <button className={styles.submitBtn} type="submit">Login</button>

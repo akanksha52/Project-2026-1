@@ -38,7 +38,7 @@ function Signup()
         <div className={styles.container}>
             <div className={styles.formBox}>
                 <h2>Create Account</h2>
-                <form onSubmit={handleSignup} action="/auth/signup" method="POST">
+                <form onSubmit={handleSignup}>
 
                     <div className={styles.inputGroup}>
                         <label>Phone</label>
@@ -47,12 +47,12 @@ function Signup()
 
                     <div className={styles.inputGroup}>
                         <label>Email</label>
-                        <input type="email" name="email" onChange={(e) => setPhone(e.target.value)} required/>
+                        <input type="email" name="email" onChange={(e) => setEmail(e.target.value)} required/>
                     </div>
 
                     <div className={styles.inputGroup}>
                         <label>Password</label>
-                        <input type="password" name="password" onChange={(e) => setPhone(e.target.value)} required/>
+                        <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} required/>
                     </div>
 
                     <button className={styles.submitBtn} type="submit">Sign Up</button>

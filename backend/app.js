@@ -19,10 +19,9 @@ app.use(cors(
 
 connectToDB();
 
-app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.set("view engine", "ejs");
+app.use(express.json()); 
 
 app.get("/", isAuth, (req, res) =>
 {

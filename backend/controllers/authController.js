@@ -18,26 +18,33 @@ export const getLogin=(req, res) =>
 
 export const postLogin=async (req, res) => 
 {
-    let {field, password}=req.body;
+    try
+    {
+        let {field, password}=req.body;
 
-    if (!field || !password)
-        return res.send("Failed to login!");
+        if (!field || !password)
+            return res.json({message: "Failed to login!"});
 
-    let user=field.includes("@")
-        ? await userModel.findOne({ email: field })
-        : await userModel.findOne({ phone: field });
+        let user=field.includes("@")
+            ? await userModel.findOne({ email: field })
+            : await userModel.findOne({ phone: field });
 
-    if(!user) return res.status(404).json({ message: "User not found" });
+        if(!user) return res.status(404).json({ message: "User not found" });
 
-    const isMatch=await argon2.verify(user.password, password);
-    if(!isMatch) return res.status(401).json({ message: "Wrong password" });
+        const isMatch=await argon2.verify(user.password, password);
+        if(!isMatch) return res.status(401).json({ message: "Wrong password" });
 
-    const token=jwt.sign({ userId: user._id }, SECRET_KEY, {
-        expiresIn: "1h",
-    });
+        const token=jwt.sign({ userId: user._id }, SECRET_KEY, {
+            expiresIn: "1h",
+        });
 
-    res.cookie("token", token, { httpOnly: true });
-    return res.status(200).json({message: "Login successful", token, user: {id: user._id, email: user.email, phone: user.phone}})
+        res.cookie("token", token, { httpOnly: true });
+        return res.status(200).json({message: "Login successful", token, user: {id: user._id, email: user.email, phone: user.phone}});
+    }
+    catch(e)
+    {
+        res.json({message: "Failed to login!"})
+    }
 };
 
 export const getSignup=(req, res) => 
@@ -52,7 +59,11 @@ export const postSignup=async (req, res) =>
     const hashedPassword=await argon2.hash(password);
     try 
     {
-        await userModel.create({ email, phone, password: hashedPassword });
+        const newUser=await userModel.create({
+            email,
+            phone,
+            password: hashedPassword
+        });
         return res.status(201).json({
             message: "User created successfully",
             user: {
