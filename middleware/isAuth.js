@@ -6,7 +6,7 @@ function isAuth(req, res, next)
     const token=req.cookies.token;
     if(!token) 
     {
-        return res.redirect("/login");
+        return res.redirect("/auth/login");
     }
     try 
     {
@@ -16,7 +16,7 @@ function isAuth(req, res, next)
     } 
     catch(err) 
     {
-        return res.redirect("/login");
+        return res.redirect("/auth/login");
     }
 };
 
