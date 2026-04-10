@@ -14,18 +14,18 @@ export const getAll=async (req, res) =>
                         .skip((page-1)*limit)
                         .limit(limit)
                         .sort({updatedAt: -1});
-        res.json(doc);
+        res.json(docs);
     }
     catch(err)
     {
-        res.status(500).send("Error fetching documents");
+        res.status(500).json({message: "Error fetching documents"});
     }
 };
 
 export const getById=async (req, res) =>
 {
     const doc=await docModel.findById(req.params.id);
-    if(!doc) return res.send("Document not found!");
+    if(!doc) return res.json({message: "Document not found!"});
     if(doc.owner.toString()!=req.userId) return res.send("Unauthorised");
     res.json(doc);
 };
@@ -41,7 +41,7 @@ export const createDoc=async (req, res) =>
     catch(err)
     {
         if(err.code==11000) return res.send("Title already exists");
-        return res.send("Error creating document");
+        return res.json({message: "Error creating document"});
     }
 }
 
@@ -54,7 +54,7 @@ export const putDocById=async (req, res) =>
     if(content!=undefined) doc.content=content;
     if(title!=undefined) doc.title=title;
     await doc.save();
-    res.send("Updated");
+    res.json({message: "Updated"});
 }
 
 export const deleteDocById=async (req, res) =>
@@ -63,5 +63,5 @@ export const deleteDocById=async (req, res) =>
     if(!doc) return res.send("Document not found");
     if(doc.owner.toString!=req.userId) return res.send("Unauthorised");
     await doc.deleteOne();
-    res.send("Deleted");
+    res.json({message: "Deleted"});
 }
