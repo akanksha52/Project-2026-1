@@ -1,16 +1,17 @@
 import { useState } from "react";
 import styles from "./Auth.module.css";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login()
 {
     const [field, setField]=useState("");
     const [password, setPassword]=useState("");
+    const navigate=useNavigate();
     async function handleLogin(e) 
     {
         e.preventDefault();
-        const res=await fetch
-        (
+        const res=await fetch (
             "http://localhost:3000/auth/login", 
             {
                 method: "POST",
@@ -24,11 +25,11 @@ function Login()
         const data=await res.json();
         if(res.ok) 
         {
-            alert("Login successful");
             localStorage.setItem("token", data.token);
+            navigate("/docs/all"); 
         } 
         else 
-            {
+        {
             alert(data.message || "Login failed ❌");
         }
     }

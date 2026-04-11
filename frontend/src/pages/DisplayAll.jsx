@@ -1,0 +1,109 @@
+import styles from "./Display.module.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function DisplayAll() {
+    const [docs, setDocs]=useState([]);
+    const navigate=useNavigate();
+
+    useEffect(() => 
+    {
+        fetch("http://localhost:3000/doc/all", 
+        {
+            headers: 
+            {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => setDocs(data))
+        .catch(err => console.error(err));
+    }, []);
+
+    async function handleNewDoc() 
+    {
+        const res=await fetch("http://localhost:3000/doc", {
+            method: "POST",
+            headers: 
+            {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify({ title: "untitled document" })
+        });
+
+        const data=await res.json();
+
+        if (res.ok) 
+        {
+            navigate(`/doc/${data._id}`); 
+        } 
+        else 
+        {
+            alert(data.message);
+        }
+    }
+
+    function openDoc(id) 
+    {
+        navigate(`/doc/${id}`);
+    }
+
+    function handleLogout() 
+    {
+        localStorage.removeItem("token");
+        navigate("/auth/login");
+    }
+
+    return (
+        <div className={styles.container}>
+
+            {/* Header */}
+            <div className={styles.header}>
+                <h1 className={styles.title}>Your Documents</h1>
+
+                <div className={styles.actions}>
+                    <button className={styles.newBtn} onClick={handleNewDoc}>
+                        + New
+                    </button>
+
+                    <button className={styles.logoutBtn} onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            {/* Empty state */}
+            {
+                Array.isArray(docs) && docs.length==0 && (
+                    <div className={styles.empty}>
+                        <h2>No documents yet</h2>
+                        <p>Create your first document 🚀</p>
+                    </div>
+                )
+            }
+
+            {/* Docs Grid */}
+            <div className={styles.grid}>
+                {docs.map((doc) => (
+                    <div 
+                        key={doc._id} 
+                        className={styles.card}
+                        onClick={() => openDoc(doc._id)}
+                    >
+                        <div className={styles.docTitle}>
+                            {doc.title}
+                        </div>
+
+                        <div className={styles.meta}>
+                            Updated: {new Date(doc.updatedAt).toLocaleDateString()}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    );
+}
+
+export default DisplayAll;

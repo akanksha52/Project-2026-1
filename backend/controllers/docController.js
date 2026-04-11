@@ -5,6 +5,11 @@ const router=express.Router();
 
 const SECRET_KEY=process.env.SECRET_KEY;
 
+export const home=(req, res) =>
+{
+    console.log("Home");
+}
+
 export const getAll=async (req, res) => 
 {
     try

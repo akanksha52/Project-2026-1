@@ -1,23 +1,23 @@
 import jwt from "jsonwebtoken";
-const SECRET_KEY=process.env.SECRET_KEY;
 
-function isAuth(req, res, next)
+function isAuth(req, res, next) 
 {
-    const token=req.cookies.token;
-    if(!token) 
+    const authHeader=req.headers.authorization;
+    if(!authHeader) 
     {
-        return res.redirect("/auth/login");
+        return res.status(401).json({ message: "No token" });
     }
+    const token=authHeader.split(" ")[1]; // 🔥 Bearer TOKEN
     try 
     {
-        const decoded=jwt.verify(token, SECRET_KEY);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
         req.userId=decoded.userId;
         next();
     } 
-    catch(err) 
+    catch (err) 
     {
-        return res.redirect("/auth/login");
+        return res.status(401).json({ message: "Invalid token" });
     }
-};
+}
 
 export default isAuth;
