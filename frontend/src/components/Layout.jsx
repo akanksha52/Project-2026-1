@@ -19,7 +19,7 @@ function Layout({ children }) {
                 <h2 className={styles.logo}>Collab</h2>
 
                 <div className={styles.menu}>
-                    <p onClick={() => navigate("/docs/all")}>📄 Documents</p>
+                    <p onClick={() => navigate("/doc/all")}>📄 Documents</p>
                     <p>⭐ Starred</p>
                     <p>🕒 Recent</p>
                 </div>
