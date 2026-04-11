@@ -1,0 +1,59 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.menu p {
+    margin: 12px 0;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.2s;
+}
+
+.menu p:hover {
+    opacity: 1;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logoutBtn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #e2e8f0;
+    cursor: pointer;
+}
+
+/* Content */
+.content {
+    padding: 25px;
+}

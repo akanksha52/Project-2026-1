@@ -1,6 +1,7 @@
 import styles from "./Display.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Layout from "../components/Layout.jsx";
 
 function DisplayAll() {
     const [docs, setDocs]=useState([]);
@@ -56,6 +57,7 @@ function DisplayAll() {
     }
 
     return (
+        <Layout>
         <div className={styles.container}>
 
             {/* Header */}
@@ -85,7 +87,8 @@ function DisplayAll() {
 
             {/* Docs Grid */}
             <div className={styles.grid}>
-                {docs.map((doc) => (
+            {
+                Array.isArray(docs) && docs.map((doc) => (
                     <div 
                         key={doc._id} 
                         className={styles.card}
@@ -99,10 +102,12 @@ function DisplayAll() {
                             Updated: {new Date(doc.updatedAt).toLocaleDateString()}
                         </div>
                     </div>
-                ))}
+                ))
+            }
             </div>
 
         </div>
+        </Layout>
     );
 }
 
