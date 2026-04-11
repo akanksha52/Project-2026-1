@@ -1,0 +1,109 @@
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff; /* Brighter background to match your workspace */
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 30px;
+    background: white;
+    border-bottom: 1px solid #edf2f7;
+    height: 60px; /* Consistent height */
+}
+
+/* BACK BUTTON */
+.backBtn {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #4a5568;
+    transition: all 0.2s;
+}
+
+.backBtn:hover {
+    background: #edf2f7;
+    color: #1a202c;
+}
+
+/* TITLE */
+.title {
+    flex: 1;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    outline: none;
+    color: #1a202c;
+    font-family: inherit;
+}
+
+/* AUTOSAVE TOGGLE */
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #718096;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle input {
+    cursor: pointer;
+    accent-color: #2d3748; /* Matches your sidebar dark theme */
+    width: 16px;
+    height: 16px;
+}
+
+/* SAVE BUTTON */
+.saveBtn {
+    background: #2d3748; /* Dark color to match your sidebar */
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: #1a202c;
+}
+
+.saveBtn:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+}
+
+/* STATUS DOT */
+.status {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #a0aec0;
+    min-width: 80px;
+}
+
+/* EDITOR AREA */
+.editor {
+    flex: 1;
+    padding: 40px; /* More breathing room */
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif; /* Or your preferred font */
+    line-height: 1.8;
+    background: white;
+    color: #2d3748;
+}
