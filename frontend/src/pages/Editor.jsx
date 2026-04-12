@@ -1,48 +1,61 @@
-import styles from "./Editor.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import styles from "./Editor.module.css";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Toolbar from "../components/Toolbar";
 
 function Editor() 
 {
     const { id }=useParams();
     const navigate=useNavigate();
-
     const [title, setTitle]=useState("");
     const [content, setContent]=useState("");
     const [saving, setSaving]=useState(false);
     const [dirty, setDirty]=useState(false);
     const [autosave, setAutosave]=useState(false);
 
+    const editor=useEditor({
+        extensions: [StarterKit],
+        content: "",
+        onUpdate: ({editor}) => 
+        {
+            const html=editor.getHTML();
+            setContent(html);
+            setDirty(true);
+        }
+    });
+
     useEffect(() => 
     {
         fetch(`http://localhost:3000/doc/${id}`, 
         {
-            headers: 
-            {
+            headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
         })
         .then(res => res.json())
-        .then(data => {
-            setTitle(data.title);
-            setContent(data.content);
+        .then(data => 
+        {
+            setTitle(data.title || "");
+            setContent(data.content || "");
+            editor?.commands.setContent(data.content);
             setDirty(false);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("Fetch error:", err));
     }, [id]);
 
-    async function save()
+    async function save() 
     {
-        if(!dirty) return;
+        if (!dirty) return;
         setSaving(true);
         try 
         {
             await fetch(`http://localhost:3000/doc/${id}`, 
             {
                 method: "PUT",
-                headers: 
-                {
+                headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 },
@@ -50,9 +63,9 @@ function Editor()
             });
             setDirty(false);
         } 
-        catch(error) 
+        catch (error) 
         {
-            console.error("Save failed", error);
+            console.error("Save failed:", error);
         } 
         finally 
         {
@@ -67,11 +80,11 @@ function Editor()
         return () => clearTimeout(timeout);
     }, [title, content, dirty, autosave]);
 
-    async function handleBack() 
+    const handleBack=async () => 
     {
         if(dirty) await save();
         navigate("/doc/all");
-    }
+    };
 
     return (
         <Layout>
@@ -79,7 +92,6 @@ function Editor()
                 <div className={styles.header}>
                     <button onClick={handleBack} className={styles.backBtn}>← Back</button>
 
-                    {/* Settings Toggle */}
                     <label className={styles.toggle}>
                         <input 
                             type="checkbox" 
@@ -93,9 +105,9 @@ function Editor()
                         className={styles.title}
                         value={title}
                         onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
+                        placeholder="Document Title"
                     />
 
-                    {/* Manual Save Button */}
                     {!autosave && (
                         <button 
                             onClick={save} 
@@ -110,14 +122,13 @@ function Editor()
                         <span style={{ color: dirty ? '#ed8936' : '#48bb78' }}>●</span> 
                         {dirty ? "Unsaved" : "Saved"}
                     </span>
-                    
                 </div>
+                
+                <Toolbar editor={editor} />
 
-                <textarea
-                    className={styles.editor}
-                    value={content}
-                    onChange={(e) => { setContent(e.target.value); setDirty(true); }}
-                />
+                <div className={styles.editorWrapper}>
+                    <EditorContent editor={editor} className={styles.tiptap}/>
+                </div>
             </div>
         </Layout>
     );

@@ -1,11 +1,10 @@
 .container {
-    height: 100vh;
+    height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
-    background: #ffffff; /* Brighter background to match your workspace */
+    background: #ffffff;
 }
 
-/* HEADER */
 .header {
     display: flex;
     align-items: center;
@@ -13,10 +12,9 @@
     padding: 10px 30px;
     background: white;
     border-bottom: 1px solid #edf2f7;
-    height: 60px; /* Consistent height */
+    min-height: 60px;
 }
 
-/* BACK BUTTON */
 .backBtn {
     background: #f8f9fa;
     border: 1px solid #e2e8f0;
@@ -26,6 +24,7 @@
     cursor: pointer;
     color: #4a5568;
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .backBtn:hover {
@@ -33,7 +32,6 @@
     color: #1a202c;
 }
 
-/* TITLE */
 .title {
     flex: 1;
     border: none;
@@ -41,10 +39,8 @@
     font-weight: 700;
     outline: none;
     color: #1a202c;
-    font-family: inherit;
 }
 
-/* AUTOSAVE TOGGLE */
 .toggle {
     display: flex;
     align-items: center;
@@ -52,19 +48,11 @@
     font-size: 13px;
     color: #718096;
     cursor: pointer;
-    user-select: none;
+    white-space: nowrap;
 }
 
-.toggle input {
-    cursor: pointer;
-    accent-color: #2d3748; /* Matches your sidebar dark theme */
-    width: 16px;
-    height: 16px;
-}
-
-/* SAVE BUTTON */
 .saveBtn {
-    background: #2d3748; /* Dark color to match your sidebar */
+    background: #2d3748;
     color: white;
     border: none;
     padding: 8px 18px;
@@ -72,11 +60,6 @@
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.saveBtn:hover:not(:disabled) {
-    background: #1a202c;
 }
 
 .saveBtn:disabled {
@@ -84,7 +67,6 @@
     cursor: not-allowed;
 }
 
-/* STATUS DOT */
 .status {
     font-size: 12px;
     display: flex;
@@ -94,16 +76,85 @@
     min-width: 80px;
 }
 
-/* EDITOR AREA */
-.editor {
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 30px;
+    background: #fafafa;
+    border-bottom: 1px solid #edf2f7;
+    align-items: center;
+}
+
+.toolBtn {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #4a5568;
+    transition: all 0.2s;
+}
+
+.toolBtn:hover {
+    background: #edf2f7;
+    color: #1a202c;
+}
+
+.activeBtn {
+    background: #2d3748;
+    color: white;
+    border: 1px solid #2d3748;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.editorArea {
     flex: 1;
-    padding: 40px; /* More breathing room */
-    border: none;
-    outline: none;
-    resize: none;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif; /* Or your preferred font */
-    line-height: 1.8;
+    overflow-y: auto;
     background: white;
+}
+
+:global(.tiptap .ProseMirror) {
+    outline: none;
+    padding: 40px 60px;
+    min-height: calc(100vh - 200px);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.8;
     color: #2d3748;
+}
+
+:global(.tiptap h1) {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+:global(.tiptap h2) {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+}
+
+:global(.tiptap ul), :global(.tiptap ol) {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+:global(.tiptap code) {
+    background: #f1f3f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+:global(.tiptap pre) {
+    background: #1a202c;
+    color: #f7fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
 }
