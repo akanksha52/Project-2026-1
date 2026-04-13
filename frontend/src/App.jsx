@@ -31,6 +31,9 @@ function App()
                 <Route path="/doc/star" element={<ProtectedRoute>
                                                     <StarredDisplay/>
                                                 </ProtectedRoute>}/>
+                <Route path="/doc/recent" element={<ProtectedRoute>
+                                                    <Editor/>
+                                                </ProtectedRoute>}/>
                 </Routes>
         </BrowserRouter>
     );

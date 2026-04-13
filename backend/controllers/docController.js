@@ -34,9 +34,13 @@ export const getById=async (req, res) =>
 {
     try
     {
+        const user=await userModel.findById(req.userId);
         const doc=await docModel.findById(req.params.id);
         if(!doc) return res.json({message: "Document not found!"});
         if(doc.owner.toString()!==req.userId) return res.json({message: "Unauthorised"});
+        user.recentDoc=doc._id;
+        await user.save();
+        console.log(user);
         res.json(doc); 
     }
     catch(e)
@@ -122,5 +126,36 @@ export const getStarred=async (req, res) =>
     catch(err) 
     {
         res.status(500).json({ message: "Error fetching starred docs" });
+    }
+};
+
+export const getRecent = async (req, res) => 
+{
+    try 
+    {
+        const user = await userModel.findById(req.userId);
+        if(!user || !user.recentDoc) 
+        {
+            console.log("No recentDoc found on user object");
+            return res.json({ message: "You have no recent document!" });
+        }
+        const doc=await docModel.findById(user.recentDoc);
+        if(!doc) 
+        {
+            console.log("Document ID exists in User, but Document is missing from DB");
+            return res.json({ message: "Recent document was deleted!" });
+        }
+        if(!doc.owner.equals(req.userId)) 
+        {
+            console.log("Ownership mismatch!");
+            return res.status(403).json({ message: "Unauthorised" });
+        }
+        console.log("Success! Sending docId");
+        res.json({ docId: doc._id });
+    } 
+    catch(e) 
+    {
+        console.error("GET RECENT ERROR:", e);
+        res.status(500).json({ message: "Server error" });
     }
 };

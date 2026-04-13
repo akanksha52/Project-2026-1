@@ -2,7 +2,8 @@ import styles from "./Layout.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function Layout({ children }) {
+function Layout({ children }) 
+{
     const navigate=useNavigate();
     const [isOpen, setIsOpen]=useState(false);
 
@@ -11,6 +12,26 @@ function Layout({ children }) {
         localStorage.removeItem("token");
         navigate("/auth/login");
     }
+    const handleRecentClick=async () => 
+    {
+        try 
+        {
+            console.log("First point")
+            const res=await fetch("http://localhost:3000/doc/recent", 
+            {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+            const data=await res.json();
+            console.log("Third point");
+            console.log(data);
+            if(res.ok && data.docId) navigate(`/doc/${data.docId}`);
+            else alert(data.message || "No recent document found.");
+        } 
+        catch (err) 
+        {
+            console.error("Error opening recent:", err);
+        }
+    };
 
     return (
         <div className={styles.layout}>
@@ -22,7 +43,7 @@ function Layout({ children }) {
                 <div className={styles.menu}>
                     <p onClick={() => navigate("/doc/all")}>📄 Documents</p>
                     <p onClick={() => navigate("/doc/star")}>⭐ Starred</p>
-                    <p>🕒 Recent</p>
+                    <p onClick={() => handleRecentClick()}>🕒 Recent</p>
                 </div>
             </div>
 

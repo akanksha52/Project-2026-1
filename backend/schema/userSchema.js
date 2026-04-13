@@ -25,7 +25,12 @@ const userSchema=new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "doc"
         }
-    ]
+    ],
+    recentDoc: 
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "doc"
+    }
 });
 
 export default userSchema;
