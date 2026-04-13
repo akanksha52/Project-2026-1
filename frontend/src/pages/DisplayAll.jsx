@@ -28,7 +28,7 @@ function DisplayAll() {
             headers: 
             {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ title: "untitled document" })
         });

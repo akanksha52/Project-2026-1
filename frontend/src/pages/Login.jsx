@@ -11,22 +11,22 @@ function Login()
     async function handleLogin(e) 
     {
         e.preventDefault();
-        const res=await fetch (
-            "http://localhost:3000/auth/login", 
+        const res=await fetch("http://localhost:3000/auth/login", {
+            method: "POST",
+            headers: 
             {
-                method: "POST",
-                headers: 
-                {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ field, password })
-            }
-        );
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ field, password })
+        });
         const data=await res.json();
         if(res.ok) 
         {
             localStorage.setItem("token", data.token);
-            navigate("/doc/all"); 
+            setTimeout(() => 
+            {
+                navigate("/doc/all");
+            }, 50);
         } 
         else 
         {

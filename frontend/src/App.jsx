@@ -4,6 +4,16 @@ import Signup from "./pages/Signup";
 import DisplayAll from "./pages/DisplayAll";
 import Editor from "./pages/Editor";
 
+function ProtectedRoute({ children }) 
+{
+    const token=localStorage.getItem("token");
+    if(!token) 
+    {
+        return <Navigate to="/auth/login" />;
+    }
+    return children;
+}
+
 function App() 
 {
     return (
@@ -11,8 +21,12 @@ function App()
             <Routes>
                 <Route path="/auth/login" element={<Login/>}/>
                 <Route path="/auth/signup" element={<Signup />} />
-                <Route path="/doc/all" element={<DisplayAll/>}/>
-                <Route path="/doc/:id" element={<Editor/>}/>
+                <Route path="/doc/all" element={<ProtectedRoute>
+                                                    <DisplayAll />
+                                                </ProtectedRoute>}/>
+                <Route path="/doc/:id" element={<ProtectedRoute>
+                                                     <Editor/>
+                                                </ProtectedRoute>}/>
             </Routes>
         </BrowserRouter>
     );

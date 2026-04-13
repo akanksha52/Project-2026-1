@@ -21,24 +21,17 @@ export const postLogin=async (req, res) =>
     try
     {
         let {field, password}=req.body;
-
         if (!field || !password)
             return res.json({message: "Failed to login!"});
-
         let user=field.includes("@")
             ? await userModel.findOne({ email: field })
             : await userModel.findOne({ phone: field });
-
         if(!user) return res.status(404).json({ message: "User not found" });
-
         const isMatch=await argon2.verify(user.password, password);
         if(!isMatch) return res.status(401).json({ message: "Wrong password" });
-
         const token=jwt.sign({ userId: user._id }, SECRET_KEY, {
             expiresIn: "1h",
         });
-
-        res.cookie("token", token, { httpOnly: true });
         return res.status(200).json({message: "Login successful", token, user: {id: user._id, email: user.email, phone: user.phone}});
     }
     catch(e)
@@ -81,6 +74,5 @@ export const postSignup=async (req, res) =>
 
 export const logout=(req, res) => 
 {
-    res.clearCookie("token");
-    return res.status(200).json({ message: "Logged out successfully" });
+    return res.json({ message: "Logged out successfully" });
 };
