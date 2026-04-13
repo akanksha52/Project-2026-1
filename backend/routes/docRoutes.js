@@ -5,7 +5,9 @@ import {
     getById,
     createDoc,
     putDocById,
-    deleteDocById
+    deleteDocById,
+    starToggle,
+    getStarred
 } from "../controllers/docController.js";
 import isAuth from "../middleware/isAuth.js";
 
@@ -16,5 +18,7 @@ router.post("/", isAuth, createDoc);
 router.get("/:id", isAuth, getById);
 router.put("/:id", isAuth, putDocById);
 router.delete("/:id", isAuth, deleteDocById);
+router.post("/star/:id", isAuth, starToggle);
+router.get("/star/:id", isAuth, getStarred);
 
 export default router;

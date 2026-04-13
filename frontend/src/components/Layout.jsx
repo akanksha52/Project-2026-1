@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Layout({ children }) {
-    const navigate = useNavigate();
+    const navigate=useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
     function handleLogout() {
@@ -20,7 +20,7 @@ function Layout({ children }) {
 
                 <div className={styles.menu}>
                     <p onClick={() => navigate("/doc/all")}>📄 Documents</p>
-                    <p>⭐ Starred</p>
+                    <p onClick={() => navigate("/doc/starred")}>⭐ Starred</p>
                     <p>🕒 Recent</p>
                 </div>
             </div>

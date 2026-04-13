@@ -1,4 +1,5 @@
 import express from "express";
+import userModel from "../models/userModel.js";
 import docModel from "../models/docModel.js";
 
 const router=express.Router();
@@ -8,24 +9,24 @@ const SECRET_KEY=process.env.SECRET_KEY;
 export const home=(req, res) =>
 {
     console.log("Home");
-}
+};
 
 export const getAll=async (req, res) => 
 {
     try
     {
-        const page=parseInt(req.query.page) || 1;
-        const lim=10;
-        const docs=await docModel.find({owner: req.userId})
-                        .select("title createdAt updatedAt")
-                        .skip((page-1)*lim)
-                        .limit(lim)
-                        .sort({updatedAt: -1});
-        res.json(docs);
+        const docs=await docModel.find({ owner: req.userId }).select("title createdAt updatedAt");
+        const user=await userModel.findById(req.userId);
+        const starredSet=new Set((user.starredDocs || []).map(id => id.toString()));
+        const docsWithStar=docs.map(doc => ({
+            ...doc.toObject(),
+            isStarred: starredSet.has(doc._id.toString())
+        }));
+        res.json(docsWithStar);
     }
     catch(err)
     {
-        res.status(500).json({message: "Error fetching documents"});
+        res.status(500).json({ message: "Error fetching documents" });
     }
 };
 
@@ -57,7 +58,7 @@ export const createDoc=async (req, res) =>
         if(err.code==11000) return res.send({message: "Title already exists"});
         return res.json({message: "Error creating document"});
     }
-}
+};
 
 export const putDocById=async (req, res) =>
 {
@@ -76,7 +77,7 @@ export const putDocById=async (req, res) =>
     {
         return res.status(500).json({message: "Some error occured"});
     }
-}
+};
 
 export const deleteDocById=async (req, res) =>
 {
@@ -92,4 +93,35 @@ export const deleteDocById=async (req, res) =>
     {
         return res.status(500).json({message: "Some error occured"});
     }
-}
+};
+
+export const starToggle=async (req, res) =>
+{
+    try
+    {
+        const user=await userModel.findById(req.userId);
+        const docId=req.params.id;
+        if(user.starredDocs.includes(docId)) user.starredDocs=user.starredDocs.filter((id) => id.toString()!==docId);
+        else user.starredDocs.push(docId);
+        await user.save();
+        res.json({ message: "Toggled star" });
+    }
+    catch(err) 
+    {
+        res.status(500).json({ message: "Error toggling star" });
+    }
+};
+
+export const getStarred=async (req, res) => 
+{
+    try 
+    {
+        const user=await userModel.findById(req.userId).populate("starredDocs", "title updatedAt");
+        res.json(user.starredDocs);
+    } 
+    catch(err) 
+    {
+        res.status(500).json({ message: "Error fetching starred docs" });
+    }
+};
+

@@ -14,10 +14,18 @@ const userSchema=new mongoose.Schema(
         required: true,
         unique: true
     },
-    password: {
+    password: 
+    {
         type: String,
         required: true
-    }
+    },
+    starredDocs: 
+    [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "doc"
+        }
+    ]
 });
 
 export default userSchema;

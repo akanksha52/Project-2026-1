@@ -93,3 +93,47 @@
     margin-top: 60px;
     color: #6b778c;
 }
+
+.card {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+}
+
+/* ⭐ STAR BUTTON */
+.starBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #b3bac5; /* default grey */
+    transition: 0.2s;
+}
+
+/* Hover effect */
+.starBtn:hover {
+    transform: scale(1.2);
+}
+
+/* ⭐ ACTIVE (STARRED) */
+.starActive {
+    color: #ffab00; /* Atlassian yellow */
+}
+
+/* ⭐ ALSO CHANGE CARD IF STARRED */
+.cardStarred {
+    border: 1px solid #ffab00;
+    background: #fff8e6; /* subtle highlight */
+}

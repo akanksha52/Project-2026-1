@@ -14,6 +14,11 @@ const docSchema=new mongoose.Schema(
         type: String,
         default: ""
     },
+    isStarred: 
+    {
+        type: Boolean,
+        default: false   
+    },
     owner:
     {
         type: mongoose.Schema.Types.ObjectId,
