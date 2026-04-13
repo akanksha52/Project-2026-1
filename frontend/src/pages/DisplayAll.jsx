@@ -70,10 +70,11 @@ function DisplayAll() {
         {
             setDocs(prevDocs =>
                 prevDocs.map(doc =>
-                    doc._id===id
-                    ? { ...doc, isStarred: !doc.isStarred }
+                    doc._id === id
+                    ? { ...doc, isStarred: !doc.isStarred } // Just flip the UI state
                     : doc
-                ));
+                )
+            );
         }
         else
         {

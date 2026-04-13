@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import DisplayAll from "./pages/DisplayAll";
 import Editor from "./pages/Editor";
+import StarredDisplay from "./pages/Starred";
 
 function ProtectedRoute({ children }) 
 {
@@ -27,7 +28,10 @@ function App()
                 <Route path="/doc/:id" element={<ProtectedRoute>
                                                      <Editor/>
                                                 </ProtectedRoute>}/>
-            </Routes>
+                <Route path="/doc/star" element={<ProtectedRoute>
+                                                    <StarredDisplay/>
+                                                </ProtectedRoute>}/>
+                </Routes>
         </BrowserRouter>
     );
 }
