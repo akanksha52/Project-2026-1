@@ -1,6 +1,7 @@
 import express from "express";
 import userModel from "../models/userModel.js";
 import docModel from "../models/docModel.js";
+import {canView, canEdit} from "../utils/permissions.js";
 
 const router=express.Router();
 
@@ -15,7 +16,13 @@ export const getAll=async (req, res) =>
 {
     try
     {
-        const docs=await docModel.find({ owner: req.userId }).select("title createdAt updatedAt");
+        const docs=await docModel.find({
+            $or: [
+                {owner: req.userId},
+                {"collaborators.userId": req.userId},
+                {isPublic: true}
+            ]
+        }).select("title createdAt updatedAt owner collaborators isPublic")
         const user=await userModel.findById(req.userId);
         const starredSet=new Set((user.starredDocs || []).map(id => id.toString()));
         const docsWithStar=docs.map(doc => ({
@@ -34,10 +41,11 @@ export const getById=async (req, res) =>
 {
     try
     {
+        
         const user=await userModel.findById(req.userId);
         const doc=await docModel.findById(req.params.id);
         if(!doc) return res.json({message: "Document not found!"});
-        if(doc.owner.toString()!==req.userId) return res.json({message: "Unauthorised"});
+        if(canView(req.userId, doc)) return res.status(403).json({ message: "Unauthorized" });
         user.recentDoc=doc._id;
         await user.save();
         console.log(user);
@@ -71,7 +79,7 @@ export const putDocById=async (req, res) =>
         const {content , title}=req.body;
         const doc=await docModel.findById(req.params.id);
         if(!doc) return res.status(404).json({ message: "Document not found" })
-        if(doc.owner.toString()!==req.userId) return res.json({message: "Unauthorised"});
+        if(!canEdit(req.userId, doc)) return res.status(403).json({ message: "Unauthorized" });
         if(content!=undefined) doc.content=content;
         if(title!=undefined) doc.title=title;
         await doc.save();
@@ -89,7 +97,7 @@ export const deleteDocById=async (req, res) =>
     {
         const doc=await docModel.findById(req.params.id);
         if(!doc) return res.status(404).json({ message: "Document not found" })
-        if(doc.owner.toString()!==req.userId) return res.json({message: "Unauthorised"});
+        if(!doc.owner.equals(req.userId)) return res.status(403).json({ message: "Only owner can delete" });
         await doc.deleteOne();
         res.json({message: "Deleted"});
     }
@@ -129,7 +137,7 @@ export const getStarred=async (req, res) =>
     }
 };
 
-export const getRecent = async (req, res) => 
+export const getRecent=async (req, res) => 
 {
     try 
     {
